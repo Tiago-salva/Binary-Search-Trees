@@ -6,14 +6,13 @@ class Node {
   }
 }
 
-// Sirve para recorrer el arbol para futuras operaciones (set, remove, etc)
 export default class Tree {
   constructor(array) {
     this.array = array;
     this.root = buildTree(this.array);
   }
 
-  // Add a new node to the final of the subtree, like a leaf
+  // It add a new node to the final of the subtree, like a leaf
   insert(value, currentNode = this.root) {
     // If the tree it's empty, the new Node it's going to be the root
     if (currentNode === null) {
@@ -41,7 +40,7 @@ export default class Tree {
     }
   }
 
-  // Delete a item
+  // Function to remove a item
   deleteItem(value, currentNode = this.root) {
     if (currentNode === null) return currentNode; // Caso base: árbol vacío
 
@@ -76,6 +75,36 @@ export default class Tree {
       node = node.left;
     }
     return node;
+  }
+
+  // Function that returns the node with the given value
+  find(value, currentNode = this.root) {
+    if (value === currentNode.value) {
+      return currentNode;
+    }
+
+    if (value < currentNode.value) {
+      return this.find(value, currentNode.left);
+    }
+
+    if (value > currentNode.value) {
+      return this.find(value, currentNode.right);
+    }
+
+    return null;
+  }
+
+  // Function that accepts a callback function as it's parameter. levelOrder should traverse the tree in breadth-first level order and call the callback on each node as it traverses.
+  levelOrder(callback) {
+    const queue = [];
+    queue.push(this.root);
+    let current = null;
+    while (queue.length > 0) {
+      current = queue.shift();
+      callback(current); // Hay que procesar current
+      if (current.left) queue.push(current.left);
+      if (current.right) queue.push(current.right);
+    }
   }
 }
 
