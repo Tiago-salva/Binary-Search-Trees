@@ -96,15 +96,51 @@ export default class Tree {
 
   // Function that accepts a callback function as it's parameter. levelOrder should traverse the tree in breadth-first level order and call the callback on each node as it traverses.
   levelOrder(callback) {
+    if (!callback) return "You need a callback function";
+
     const queue = [];
     queue.push(this.root);
     let current = null;
     while (queue.length > 0) {
       current = queue.shift();
-      callback(current); // Hay que procesar current
+      callback(current); // Process the current node
       if (current.left) queue.push(current.left);
       if (current.right) queue.push(current.right);
     }
+  }
+
+  // Primero el subarbol izquierdo, luego el nodo actual y por ultimo el subarbol derecho
+  inOrder(callback, currentNode = this.root) {
+    if (!callback) return "You need a callback function";
+
+    if (!currentNode) return;
+
+    this.inOrder(callback, currentNode.left);
+    callback(currentNode);
+    this.inOrder(callback, currentNode.right);
+  }
+
+  // Primero el nodo actual, luego el subarbol izquierdo y por ultimo el subarbol derecho
+  preOrder(callback, currentNode = this.root) {
+    if (!callback) return "You need a callback function";
+
+    if (!currentNode) return;
+
+    callback(currentNode);
+
+    this.preOrder(callback, currentNode.left);
+    this.preOrder(callback, currentNode.right);
+  }
+
+  // Primero el subarbol izquierdo, luego el subarbol derecho y por ultimo el nodo actual
+  postOrder(callback, currentNode = this.root) {
+    if (!callback) return "You need a callback function";
+
+    if (!currentNode) return;
+
+    this.postOrder(callback, currentNode.left);
+    this.postOrder(callback, currentNode.right);
+    callback(currentNode);
   }
 }
 
