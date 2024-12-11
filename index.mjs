@@ -181,6 +181,31 @@ export default class Tree {
       return this.depth(node, currentNode.right, depth + 1);
     }
   }
+
+  // Function that checks if the tree is balanced
+  isBalanced(currentNode = this.root) {
+    function checkHeight(node) {
+      // Si el nodo es null, la altura es 0 y está balanceado
+      if (!node) return 0;
+
+      // Calcula la altura del subárbol izquierdo
+      const leftHeight = checkHeight(node.left);
+      if (leftHeight === -1) return -1; // Si el subárbol izquierdo no está balanceado
+
+      // Calcula la altura del subárbol derecho
+      const rightHeight = checkHeight(node.right);
+      if (rightHeight === -1) return -1; // Si el subárbol derecho no está balanceado
+
+      // Verifica el factor de balance del nodo actual
+      if (Math.abs(leftHeight - rightHeight) > 1) return -1;
+
+      // Retorna la altura del subárbol actual
+      return 1 + Math.max(leftHeight, rightHeight);
+    }
+
+    // Si la función retorna -1, el árbol no está balanceado
+    return checkHeight(currentNode) !== -1;
+  }
 }
 
 // Transforma todos los elementos en nodos y crea el arbol
