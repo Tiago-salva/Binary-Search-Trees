@@ -94,7 +94,9 @@ export default class Tree {
     return null;
   }
 
-  // Function that accepts a callback function as it's parameter. levelOrder should traverse the tree in breadth-first level order and call the callback on each node as it traverses.
+  // Function that accepts a callback function as it's parameter.
+  // levelOrder should traverse the tree in breadth-first level order
+  // and call the callback on each node as it traverses.
   levelOrder(callback) {
     if (!callback) return "You need a callback function";
 
@@ -141,6 +143,43 @@ export default class Tree {
     this.postOrder(callback, currentNode.left);
     this.postOrder(callback, currentNode.right);
     callback(currentNode);
+  }
+
+  // Function that returns the given node's height
+  height(node) {
+    // Primero, encuentra el nodo inicial utilizando `find`
+    const startNode = this.find(node);
+    if (!startNode) return -1; // Si no se encuentra, retorna -1
+
+    // Define una función recursiva interna para calcular la altura
+    const calculateHeight = (currentNode) => {
+      if (!currentNode) return -1; // Caso base: nodo nulo tiene altura -1
+
+      // Calcula recursivamente las alturas de los subárboles izquierdo y derecho
+      const leftHeight = calculateHeight(currentNode.left);
+      const rightHeight = calculateHeight(currentNode.right);
+
+      // La altura del nodo actual es 1 + el máximo entre las alturas de los subárboles
+      return 1 + Math.max(leftHeight, rightHeight);
+    };
+
+    // Llama a la función recursiva a partir del nodo inicial
+    return calculateHeight(startNode);
+  }
+
+  // Function that returns the given node’s depth
+  depth(node, currentNode = this.root, depth = 0) {
+    if (!node) return null;
+
+    if (!currentNode) return -1;
+
+    if (node === currentNode.value) {
+      return depth;
+    } else if (node < currentNode.value) {
+      return this.depth(node, currentNode.left, depth + 1);
+    } else if (node > currentNode.value) {
+      return this.depth(node, currentNode.right, depth + 1);
+    }
   }
 }
 
